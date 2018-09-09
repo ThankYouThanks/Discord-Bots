@@ -26,84 +26,34 @@ bot.on('message', function (user, userID, channelID, message, evt) {
        
         args = args.splice(1);
         switch(cmd) {
-            case '':
-                oblique();						//posts one of Brian Eno's Oblique Strategies into the discord server.
-            break;	
-            case 'btc':
-            case 'bitcoin':
-                var url = "https://api.coinmarketcap.com/v1/ticker/bitcoin/"
-                var usd = "0.0";
-                https.get(url, function(res){
-                    var body = '';
+			default:
+				var url = "https://api.coinmarketcap.com/v1/ticker/" + cmd + "/";
+				var usd = "0.0";
+				https.get(url, function(res){
+					var body = '';
 
-                    res.on('data', function(chunk){
-                        body += chunk;
-                    });
+					res.on('data', function(chunk){
+						body += chunk;
+					});
 
-                    res.on('end', function(){
-                        var capResponse = JSON.parse(body);
+					res.on('end', function(){
+						var capResponse = JSON.parse(body);
+						if (capResponse[0] !== undefined){
 
-                        console.log("Got a response: ", capResponse[0].price_usd);
-
-                        usd = String(capResponse[0].price_usd);
-                        bot.sendMessage({
-                            to: channelID,
-                            message: "$" + usd + " CoinMarketCap"
-                        });
-                    });
-                });
-            break;
-            case 'eth':
-            case 'ethereum':
-                var url = "https://api.coinmarketcap.com/v1/ticker/ethereum/"
-                var usd = "0.0";
-                https.get(url, function(res){
-                    var body = '';
-
-                    res.on('data', function(chunk){
-                        body += chunk;
-                    });
-
-                    res.on('end', function(){
-                        var capResponse = JSON.parse(body);
-
-                        console.log("Got a response: ", capResponse[0].price_usd);
-
-                        usd = String(capResponse[0].price_usd);
-                        bot.sendMessage({
-                            to: channelID,
-                            message: "$" + usd + " CoinMarketCap"
-                        });
-                    });
-                });
-            break;
-            case 'link':
-            case 'chainlink':
-                var url = "https://api.coinmarketcap.com/v1/ticker/chainlink/"
-                var usd = "0.0";
-                https.get(url, function(res){
-                    var body = '';
-
-                    res.on('data', function(chunk){
-                        body += chunk;
-                    });
-
-                    res.on('end', function(){
-                        var capResponse = JSON.parse(body);
-
-                        console.log("Got a response: ", capResponse[0].price_usd);
-
-                        usd = String(capResponse[0].price_usd);
-                        bot.sendMessage({
-                            to: channelID,
-                            message: "$" + usd + " CoinMarketCap"
-                        });
-                    });
-                });
-            break;		
-	    }		
-    }
-    
+							usd = String(capResponse[0].price_usd);
+							bot.sendMessage({
+								to: channelID,
+								message: "$" + usd + " CoinMarketCap"
+							});
+						}	
+					});
+				});	
+			break;	
+			case '':
+				oblique();
+			break;			
+		}		
+	}
 //The function oblique posts one of Brian Eno's Oblique Strategies into the discord server.	
 function oblique() {
 	var rand = getRandomInt(0,115);
@@ -800,6 +750,7 @@ function oblique() {
 		break;
 	}
 }
+
 });
 //The getRandomInt function is used to generate a psuedorandom integer between two values.
 function getRandomInt(min, max) {
