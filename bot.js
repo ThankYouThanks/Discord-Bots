@@ -43,17 +43,45 @@ bot.on('message', function (user, userID, channelID, message, evt) {
 							usd = String(capResponse[0].price_usd);
 							bot.sendMessage({
 								to: channelID,
-								message: "$" + usd + " CoinMarketCap"
+								message: "$" + usd + " - CoinMarketCap"
 							});
 						}	
 					});
 				});	
+				if (message == "!" + cmd + " info"){
+					var url = "https://api.coinmarketcap.com/v1/ticker/" + cmd + "/";
+					https.get(url, function(res){
+						var body = '';
+
+						res.on('data', function(chunk){
+							body += chunk;
+						});
+
+						res.on('end', function(){
+							var capResponse = JSON.parse(body);
+							if (capResponse[0] !== undefined){
+
+								var priceBtc = String(capResponse[0].price_btc);
+								var percentChange1h = String(capResponse[0].percent_change_1h);
+								var percentChange24h = String(capResponse[0].percent_change_24h);
+								var percentChange7d = String(capResponse[0].percent_change_7d);								
+								bot.sendMessage({
+									to: channelID,
+									message: priceBtc + " BTC per " + cmd + "\n1 Hour Change: " + percentChange1h + "%"
+											 + "\n24 Hour Change: " + percentChange24h + "%"
+											 + "\n7 Day Change: " + percentChange7d + "%"
+								});
+							}	
+						});					
+					});
+				}
 			break;	
 			case '':
-				oblique();
+				oblique();						//posts one of Brian Eno's Oblique Strategies into the discord server.
 			break;			
 		}		
 	}
+	
 //The function oblique posts one of Brian Eno's Oblique Strategies into the discord server.	
 function oblique() {
 	var rand = getRandomInt(0,115);
@@ -751,11 +779,12 @@ function oblique() {
 	}
 }
 
-});
 //The getRandomInt function is used to generate a psuedorandom integer between two values.
 function getRandomInt(min, max) {
   min = Math.ceil(min);
   max = Math.floor(max);
   return Math.floor(Math.random() * (max - min)) + min;
 }
+
+});
 
