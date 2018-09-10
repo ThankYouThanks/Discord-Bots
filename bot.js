@@ -1,46 +1,29 @@
 const Discord = require ('discord.io');
-const logger = require('winston');
 const auth = require('./auth.json');
 const https = require('https');
 
-// Configure logger settings
-logger.remove(logger.transports.Console);
-logger.add(new logger.transports.Console, {
-    colorize: true
-});
-logger.level = 'debug';
 // Initialize Discord Bot
 var bot = new Discord.Client({
    token: auth.token,
    autorun: true
 });
-bot.on('ready', function (evt) {
-    logger.info('Connected');
-    logger.info('Logged in as: ');
-    logger.info(bot.username + ' - (' + bot.id + ')');
-});
 bot.on('message', function (user, userID, channelID, message, evt) {
     if (message.substring(0, 1) == '!') {     
         var args = message.substring(1).split(' ');
-        var cmd = args[0];
-       
+        var cmd = args[0];       
         args = args.splice(1);
         switch(cmd) {
             default:
                 var url = "https://api.coinmarketcap.com/v1/ticker/" + cmd + "/";
-                var usd = "0.0";
                 https.get(url, function(res){
                     var body = '';
-
                     res.on('data', function(chunk){
                         body += chunk;
                     });
-
                     res.on('end', function(){
                         var capResponse = JSON.parse(body);
                         if (capResponse[0] !== undefined){
-
-                            usd = String(capResponse[0].price_usd);
+                            var usd = String(capResponse[0].price_usd);
                             bot.sendMessage({
                                 to: channelID,
                                 message: "$" + usd + " - CoinMarketCap"
@@ -52,15 +35,12 @@ bot.on('message', function (user, userID, channelID, message, evt) {
                     var url = "https://api.coinmarketcap.com/v1/ticker/" + cmd + "/";
                     https.get(url, function(res){
                         var body = '';
-
                         res.on('data', function(chunk){
                             body += chunk;
                         });
-
                         res.on('end', function(){
                             var capResponse = JSON.parse(body);
                             if (capResponse[0] !== undefined){
-
                                 var priceBtc = String(capResponse[0].price_btc);
                                 var percentChange1h = String(capResponse[0].percent_change_1h);
                                 var percentChange24h = String(capResponse[0].percent_change_24h);
@@ -77,7 +57,7 @@ bot.on('message', function (user, userID, channelID, message, evt) {
                 }
             break;  
             case '':
-                oblique();                      //posts one of Brian Eno's Oblique Strategies into the discord server.
+                oblique();
             break;          
         }       
     }
