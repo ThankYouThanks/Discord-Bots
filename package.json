@@ -1,0 +1,11 @@
+{
+  "name": "Discord Bot",
+  "version": "1.0.2",
+  "description": "",
+  "main": "bot.js",
+  "author": "ThankYouThanks",
+  "dependencies": {
+    "discord.io": "https://github.com/woor/discord.io/tarball/gateway_v6",
+    "https": "^1.0.0",
+  }
+}
