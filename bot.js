@@ -12,10 +12,10 @@ bot.on('message', function (user, userID, channelID, message, evt) {
         var args = message.substring(1).split(' ');
         var cmd = args[0];       
         args = args.splice(1);
-		if (message.substring(1,7) == 'bible '){
-			verse = message.replace('!bible ','');
-			message = message.substring(0,6);
-		}
+        if (message.substring(1,7) == 'bible '){
+            verse = message.replace('!bible ','');
+            message = message.substring(0,6);
+        }
         switch(message) {
             default:
                 var url = "https://api.coinmarketcap.com/v1/ticker/" + cmd + "/";
@@ -63,7 +63,7 @@ bot.on('message', function (user, userID, channelID, message, evt) {
             case '!':
                 oblique();
             break;
-			case '!fire on ya':
+            case '!fire on ya':
                 var url = "https://labs.bible.org/api/?passage=random&type=json";
                 https.get(url, function(res){
                     var body = '';
@@ -72,16 +72,16 @@ bot.on('message', function (user, userID, channelID, message, evt) {
                     });
                     res.on('end', function(){
                         var obj = JSON.parse(body);
-						bot.sendMessage({
-							to: channelID,
-							message: obj[0].text + "  --  " + obj[0].bookname + " " + obj[0].chapter + ":" + obj[0].verse
-						});
-					});
-				});
-			break;
-			case '!bible':
-				var verseNew = verse.replace(' ', '+');
-				var url = "https://labs.bible.org/api/?passage=" + verseNew +"&type=json";
+                        bot.sendMessage({
+                            to: channelID,
+                            message: obj[0].text + "  --  " + obj[0].bookname + " " + obj[0].chapter + ":" + obj[0].verse
+                        });
+                    });
+                });
+            break;
+            case '!bible':
+                var verseNew = verse.replace(' ', '+');
+                var url = "https://labs.bible.org/api/?passage=" + verseNew +"&type=json";
                 https.get(url, function(res){
                     var body = '';
                     res.on('data', function(chunk){
@@ -89,13 +89,13 @@ bot.on('message', function (user, userID, channelID, message, evt) {
                     });
                     res.on('end', function(){
                         var obj = JSON.parse(body);
-						bot.sendMessage({
-							to: channelID,
-							message: obj[0].text + "  --  " + obj[0].bookname + " " + obj[0].chapter + ":" + obj[0].verse
-						});
-					});
-				});
-			break;					
+                        bot.sendMessage({
+                            to: channelID,
+                            message: obj[0].text + "  --  " + obj[0].bookname + " " + obj[0].chapter + ":" + obj[0].verse
+                        });
+                    });
+                });
+            break;                    
         }       
     }
     
